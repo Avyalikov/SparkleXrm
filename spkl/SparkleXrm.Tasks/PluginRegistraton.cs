@@ -494,6 +494,10 @@ namespace SparkleXrm.Tasks
             step.SdkMessageFilterId = sdkMessagefilterId != null ? new EntityReference(SdkMessageFilter.EntityLogicalName, sdkMessagefilterId.Value) : null;
             step.SdkMessageId = new EntityReference(SdkMessage.EntityLogicalName, sdkMessageId.Value);
             step.FilteringAttributes = normaliseCommaSeparatedString(pluginStep.FilteringAttributes);
+            if (pluginStep.ImpersonatingUserId != null)
+            {
+                step.ImpersonatingUserId = new EntityReference("systemuser", pluginStep.ImpersonatingUserId);
+            }
            
             if (step.Id == Guid.Empty)
             {
