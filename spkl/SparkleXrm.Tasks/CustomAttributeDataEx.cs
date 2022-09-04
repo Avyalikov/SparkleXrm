@@ -108,8 +108,8 @@ namespace SparkleXrm.Tasks
                     case "Action":
                         attribute.Action = (PluginStepOperationEnum)namedArgument.TypedValue.Value;
                         break;
-                    case "ImpersonatingUserId":
-                        attribute.ImpersonatingUserId = Guid.Parse((string)namedArgument.TypedValue.Value);
+                    case "ImpersonatingUserAttribute":
+                        attribute.ImpersonatingUserAttribute = (string)namedArgument.TypedValue.Value;
                         break;
                 }
             }
@@ -171,8 +171,8 @@ namespace SparkleXrm.Tasks
             if (attribute.Action != null)
                 additionalParmeters += indentation + ",Action = PluginStepOperationEnum." + attribute.Action.ToString();
 
-            if (attribute.ImpersonatingUserId != null)
-                additionalParmeters += indentation + ",ImpersonatingUserId = \"" + attribute.ImpersonatingUserId.ToString() + "\"";
+            if (attribute.ImpersonatingUserAttribute != null)
+                additionalParmeters += indentation + ",ImpersonatingUserField = \"" + attribute.ImpersonatingUserAttribute.ToString() + "\"";
 
             // determine which template to use
             if (targetType == TargetType.Plugin)

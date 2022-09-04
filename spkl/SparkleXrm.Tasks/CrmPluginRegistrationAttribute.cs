@@ -106,7 +106,7 @@ public class CrmPluginRegistrationAttribute : Attribute
     public ImageTypeEnum Image1Type { get; set; }
     public ImageTypeEnum Image2Type { get; set; }
     public PluginStepOperationEnum? Action { get; set; }
-    public Guid ImpersonatingUserId { get; set; }
+    public string ImpersonatingUserAttribute { get; set; }
     #endregion
 
     #region Constructor Mandatory Properties

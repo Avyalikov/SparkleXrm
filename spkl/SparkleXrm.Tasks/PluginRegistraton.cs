@@ -394,7 +394,8 @@ namespace SparkleXrm.Tasks
                              EventHandler = s.EventHandler,
                              AsyncAutoDelete = s.AsyncAutoDelete,
                              Attributes = s.Attributes,
-                             SdkMessageFilterId = s.SdkMessageFilterId
+                             SdkMessageFilterId = s.SdkMessageFilterId,
+                             ImpersonatingUserId = s.ImpersonatingUserId
                          }).ToList();
 
             return steps;
@@ -494,9 +495,20 @@ namespace SparkleXrm.Tasks
             step.SdkMessageFilterId = sdkMessagefilterId != null ? new EntityReference(SdkMessageFilter.EntityLogicalName, sdkMessagefilterId.Value) : null;
             step.SdkMessageId = new EntityReference(SdkMessage.EntityLogicalName, sdkMessageId.Value);
             step.FilteringAttributes = normaliseCommaSeparatedString(pluginStep.FilteringAttributes);
-            if (pluginStep.ImpersonatingUserId != null)
+            if (pluginStep.ImpersonatingUserAttribute != null)
             {
-                step.ImpersonatingUserId = new EntityReference("systemuser", pluginStep.ImpersonatingUserId);
+                var impersonatingUsers = (from s in _ctx.CreateQuery("systemuser")
+                                         where s.GetAttributeValue<bool>(pluginStep.ImpersonatingUserAttribute)
+                                         select s).ToList();
+                if (impersonatingUsers.Any())
+                {
+                    step.ImpersonatingUserId = new EntityReference("systemuser", impersonatingUsers.FirstOrDefault().Id);
+                }
+            }
+
+            if (step.ImpersonatingUserId != null && pluginStep.ImpersonatingUserAttribute == null)
+            {
+                step.ImpersonatingUserId = null;
             }
            
             if (step.Id == Guid.Empty)
